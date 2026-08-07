@@ -121,6 +121,11 @@ namespace AppTask.Controllers
             return View(tarefa);
         }
 
+        public async Task<IActionResult> Sobre()
+        {
+            return View();
+        }
+
         // GET: Tarefa/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
