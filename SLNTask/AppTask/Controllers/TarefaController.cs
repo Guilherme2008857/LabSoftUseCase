@@ -47,7 +47,7 @@ namespace AppTask.Controllers
         // GET: Tarefa/Create
         public IActionResult Create()
         {
-            ViewData["CodigoFuncionario"] = new SelectList(_context.Funcionarios, "Codigo", "Nome");
+            ViewData["ListaFuncionario"] = new SelectList(_context.Funcionarios, "Codigo", "Nome");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace AppTask.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Descricao,DataPlanejada,DataIniciada,DataFinalizada,DataCancelada,StatusTarefa,Prazo,CodigoFuncionario")] Tarefa tarefa)
+        public async Task<IActionResult> Create([Bind("Codigo,Descricao,DataPlanejada,DataIniciada,DataFinalizada,DataCancelada,StatusTarefa,Prazo,FuncionarioId")] Tarefa tarefa)
         {
             if (ModelState.IsValid)
             {
