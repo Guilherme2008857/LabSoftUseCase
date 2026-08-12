@@ -19,6 +19,8 @@ public partial class DbTasksContext : DbContext
 
     public virtual DbSet<Tarefa> Tarefas { get; set; }
 
+    public virtual DbSet<Incidente> Incidentes { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConexaoSqlServer");
 
@@ -62,6 +64,28 @@ public partial class DbTasksContext : DbContext
                 .HasForeignKey(d => d.FuncionarioId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Tarefa_Funcionario");
+        });
+
+        modelBuilder.Entity<Incidente>(entity =>
+        {
+            entity.HasKey(e => e.Codigo);
+
+            entity.ToTable("Incidente");
+
+            entity.Property(e => e.DescricaoProblema)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+
+            entity.Property(e => e.DataIncidente)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.Solucao)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+
+            entity.Property(e => e.Resolvido)
+                .HasMaxLength(3)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
