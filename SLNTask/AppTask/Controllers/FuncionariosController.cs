@@ -28,8 +28,6 @@ namespace AppTask.Controllers
             return View(funcionarios);
         }
 
-
-
         // GET: Funcionarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -39,7 +37,9 @@ namespace AppTask.Controllers
             }
 
             var funcionario = await _context.Funcionarios
-                .FirstOrDefaultAsync(m => m.Codigo == id);
+    .Include(f => f.Departamento)
+    .FirstOrDefaultAsync(m => m.Codigo == id);
+
             if (funcionario == null)
             {
                 return NotFound();
