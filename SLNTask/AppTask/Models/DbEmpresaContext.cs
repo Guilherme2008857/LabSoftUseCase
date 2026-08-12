@@ -15,28 +15,24 @@ public partial class DbEmpresaContext : DbContext
     {
     }
 
-    public virtual DbSet<Incidente> Incidentes { get; set; }
+    public virtual DbSet<Departamento> Departamentos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConexaoSqlServer");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Incidente>(entity =>
+        modelBuilder.Entity<Departamento>(entity =>
         {
-            entity.HasKey(e => e.Codigo).HasName("PK__Incident__06370DAD28B51527");
+            entity.HasKey(e => e.Codigo).HasName("PK__Departam__06370DADBFF05212");
 
-            entity.ToTable("Incidente");
+            entity.ToTable("Departamento");
 
-            entity.Property(e => e.DataIncidente).HasColumnType("datetime");
-            entity.Property(e => e.DescricaoProblema)
-                .HasMaxLength(250)
+            entity.Property(e => e.Nome)
+                .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Resolvido)
-                .HasMaxLength(3)
-                .IsUnicode(false);
-            entity.Property(e => e.Solucao)
-                .HasMaxLength(250)
+            entity.Property(e => e.Sigla)
+                .HasMaxLength(10)
                 .IsUnicode(false);
         });
 

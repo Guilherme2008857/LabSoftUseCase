@@ -21,6 +21,9 @@ public partial class DbTasksContext : DbContext
 
     public virtual DbSet<Incidente> Incidentes { get; set; }
 
+    public virtual DbSet<Departamento> Departamentos { get; set; }
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConexaoSqlServer");
 
@@ -35,10 +38,18 @@ public partial class DbTasksContext : DbContext
             entity.Property(e => e.Cargo)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
             entity.Property(e => e.Nome)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Departamento)
+                .WithMany(p => p.Funcionarios)
+                .HasForeignKey(d => d.DepartamentoId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_Funcionario_Departamento");
         });
+
 
         modelBuilder.Entity<Tarefa>(entity =>
         {
@@ -85,6 +96,21 @@ public partial class DbTasksContext : DbContext
 
             entity.Property(e => e.Resolvido)
                 .HasMaxLength(3)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Departamento>(entity =>
+        {
+            entity.HasKey(e => e.Codigo);
+
+            entity.ToTable("Departamento");
+
+            entity.Property(e => e.Nome)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.Property(e => e.Sigla)
+                .HasMaxLength(10)
                 .IsUnicode(false);
         });
 

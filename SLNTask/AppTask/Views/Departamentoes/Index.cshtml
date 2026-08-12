@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AppTask.Models.Funcionario>
+﻿@model IEnumerable<AppTask.Models.Departamento>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,11 +16,9 @@
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cargo)
+                @Html.DisplayNameFor(model => model.Sigla)
             </th>
-            <th>
-                Departamento
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -30,20 +28,8 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cargo)
+                @Html.DisplayFor(modelItem => item.Sigla)
             </td>
-                <td>
-                    @if (item.Departamento != null)
-                    {
-                        @item.Departamento.Nome
-                    }
-                    else
-                    {
-                        <span>Sem departamento</span>
-                    }
-                </td>
-
-
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Codigo">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Codigo">Details</a> |

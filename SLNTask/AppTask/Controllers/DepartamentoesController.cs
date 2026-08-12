@@ -9,28 +9,22 @@ using AppTask.Models;
 
 namespace AppTask.Controllers
 {
-    public class FuncionariosController : Controller
+    public class DepartamentoesController : Controller
     {
         private readonly DbTasksContext _context;
 
-        public FuncionariosController(DbTasksContext context)
+        public DepartamentoesController(DbTasksContext context)
         {
             _context = context;
         }
 
-        // GET: Funcionarios
+        // GET: Departamentoes
         public async Task<IActionResult> Index()
         {
-            var funcionarios = await _context.Funcionarios
-                .Include(f => f.Departamento)
-                .ToListAsync();
-
-            return View(funcionarios);
+            return View(await _context.Departamentos.ToListAsync());
         }
 
-
-
-        // GET: Funcionarios/Details/5
+        // GET: Departamentoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,39 +32,39 @@ namespace AppTask.Controllers
                 return NotFound();
             }
 
-            var funcionario = await _context.Funcionarios
+            var departamento = await _context.Departamentos
                 .FirstOrDefaultAsync(m => m.Codigo == id);
-            if (funcionario == null)
+            if (departamento == null)
             {
                 return NotFound();
             }
 
-            return View(funcionario);
+            return View(departamento);
         }
 
-        // GET: Funcionarios/Create
+        // GET: Departamentoes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Funcionarios/Create
+        // POST: Departamentoes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nome,Cargo")] Funcionario funcionario)
+        public async Task<IActionResult> Create([Bind("Codigo,Nome,Sigla")] Departamento departamento)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(funcionario);
+                _context.Add(departamento);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(funcionario);
+            return View(departamento);
         }
 
-        // GET: Funcionarios/Edit/5
+        // GET: Departamentoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +72,22 @@ namespace AppTask.Controllers
                 return NotFound();
             }
 
-            var funcionario = await _context.Funcionarios.FindAsync(id);
-            if (funcionario == null)
+            var departamento = await _context.Departamentos.FindAsync(id);
+            if (departamento == null)
             {
                 return NotFound();
             }
-            return View(funcionario);
+            return View(departamento);
         }
 
-        // POST: Funcionarios/Edit/5
+        // POST: Departamentoes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nome,Cargo")] Funcionario funcionario)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nome,Sigla")] Departamento departamento)
         {
-            if (id != funcionario.Codigo)
+            if (id != departamento.Codigo)
             {
                 return NotFound();
             }
@@ -102,12 +96,12 @@ namespace AppTask.Controllers
             {
                 try
                 {
-                    _context.Update(funcionario);
+                    _context.Update(departamento);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FuncionarioExists(funcionario.Codigo))
+                    if (!DepartamentoExists(departamento.Codigo))
                     {
                         return NotFound();
                     }
@@ -118,10 +112,10 @@ namespace AppTask.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(funcionario);
+            return View(departamento);
         }
 
-        // GET: Funcionarios/Delete/5
+        // GET: Departamentoes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,48 +123,34 @@ namespace AppTask.Controllers
                 return NotFound();
             }
 
-            var funcionario = await _context.Funcionarios
+            var departamento = await _context.Departamentos
                 .FirstOrDefaultAsync(m => m.Codigo == id);
-            if (funcionario == null)
+            if (departamento == null)
             {
                 return NotFound();
             }
 
-            return View(funcionario);
+            return View(departamento);
         }
 
-        // POST: Funcionarios/Delete/5
+        // POST: Departamentoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var funcionario = await _context.Funcionarios.FindAsync(id);
-
-            if (funcionario == null)
+            var departamento = await _context.Departamentos.FindAsync(id);
+            if (departamento != null)
             {
-                return NotFound();
+                _context.Departamentos.Remove(departamento);
             }
 
-            bool possuiTarefas = await _context.Tarefas
-                .AnyAsync(t => t.FuncionarioId == id);
-
-            if (possuiTarefas)
-            {
-                TempData["Erro"] = "Não é possível excluir este funcionário porque existem tarefas vinculadas a ele.";
-                return RedirectToAction(nameof(Delete), new { id });
-            }
-
-            _context.Funcionarios.Remove(funcionario);
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
 
-
-
-        private bool FuncionarioExists(int id)
+        private bool DepartamentoExists(int id)
         {
-            return _context.Funcionarios.Any(e => e.Codigo == id);
+            return _context.Departamentos.Any(e => e.Codigo == id);
         }
     }
 }
