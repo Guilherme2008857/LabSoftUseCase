@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AppTask.Models;
+using AppTask.Models.Services;
 
 namespace AppTask.Controllers
 {
     public class TarefaController : Controller
     {
         private readonly DbTasksContext _context;
+        private RegraTarefa _regraTarefa;
 
         public TarefaController(DbTasksContext context)
         {
             _context = context;
+            _regraTarefa = new RegraTarefa();
         }
 
         // GET: Tarefa
@@ -97,7 +100,7 @@ namespace AppTask.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid & _regraTarefa.validarDataFinal(tarefa.DataIniciada, tarefa.DataFinalizada))
             {
                 try
                 {
