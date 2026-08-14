@@ -21,151 +21,132 @@ namespace AppTask.Controllers
             _regraTarefa = new RegraTarefa();
         }
 
-        // GET: Tarefa
         public async Task<IActionResult> Index()
         {
             var dbTasksContext = _context.Tarefas.Include(t => t.Funcionario);
             return View(await dbTasksContext.ToListAsync());
         }
 
-        // GET: Tarefa/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tarefa = await _context.Tarefas
-                .Include(t => t.Funcionario)
-                .FirstOrDefaultAsync(m => m.Codigo == id);
-            if (tarefa == null)
-            {
-                return NotFound();
-            }
-
-            return View(tarefa);
+            if (id == null) return NotFound();
+            var tarefa = await _context.Tarefas.Include(t => t.Funcionario).FirstOrDefaultAsync(m => m.Codigo == id);
+            return tarefa == null ? NotFound() : View(tarefa);
         }
 
-        // GET: Tarefa/Create
         public IActionResult Create()
         {
             ViewData["FuncionarioId"] = new SelectList(_context.Funcionarios, "Codigo", "Nome");
             return View();
         }
 
-        // POST: Tarefa/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Codigo,Descricao,DataPlanejada,DataIniciada,DataFinalizada,DataCancelada,StatusTarefa,Prazo,FuncionarioId")] Tarefa tarefa)
         {
+            // Remove validação automática da navegação para evitar erros falsos
+            ModelState.Remove(nameof(Tarefa.Funcionario));
+
+            // Validação de Datas (Regra de Negócio)
+            if (!_regraTarefa.validarDataFinal(tarefa.DataIniciada, tarefa.DataFinalizada))
+            {
+                ModelState.AddModelError(nameof(Tarefa.DataFinalizada), "A data final deve ser posterior à data inicial.");
+            }
+
+            // Validação de Funcionário obrigatório
+            if (tarefa.FuncionarioId <= 0)
+            {
+                ModelState.AddModelError(nameof(Tarefa.FuncionarioId), "Selecione um funcionário.");
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(tarefa);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Tarefas.Add(tarefa);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException?.Message ?? ex.Message);
+                }
             }
+
             ViewData["FuncionarioId"] = new SelectList(_context.Funcionarios, "Codigo", "Nome", tarefa.FuncionarioId);
             return View(tarefa);
         }
 
-        // GET: Tarefa/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
             var tarefa = await _context.Tarefas.FindAsync(id);
-            if (tarefa == null)
-            {
-                return NotFound();
-            }
+            if (tarefa == null) return NotFound();
             ViewData["FuncionarioId"] = new SelectList(_context.Funcionarios, "Codigo", "Nome", tarefa.FuncionarioId);
             return View(tarefa);
         }
 
-        // POST: Tarefa/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Codigo,Descricao,DataPlanejada,DataIniciada,DataFinalizada,DataCancelada,StatusTarefa,Prazo,FuncionarioId")] Tarefa tarefa)
         {
-            if (id != tarefa.Codigo)
+            if (id != tarefa.Codigo) return NotFound();
+
+            ModelState.Remove(nameof(Tarefa.Funcionario));
+
+            // Validação de Datas (Regra de Negócio)
+            if (!_regraTarefa.validarDataFinal(tarefa.DataIniciada, tarefa.DataFinalizada))
             {
-                return NotFound();
+                ModelState.AddModelError(nameof(Tarefa.DataFinalizada), "A data final deve ser posterior à data inicial.");
             }
 
-            if (ModelState.IsValid & _regraTarefa.validarDataFinal(tarefa.DataIniciada, tarefa.DataFinalizada))
+            if (tarefa.FuncionarioId <= 0)
+            {
+                ModelState.AddModelError(nameof(Tarefa.FuncionarioId), "Selecione um funcionário.");
+            }
+
+            if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(tarefa);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TarefaExists(tarefa.Codigo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!TarefaExists(tarefa.Codigo)) return NotFound();
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException?.Message ?? ex.Message);
+                }
             }
+
             ViewData["FuncionarioId"] = new SelectList(_context.Funcionarios, "Codigo", "Nome", tarefa.FuncionarioId);
             return View(tarefa);
         }
 
-        public async Task<IActionResult> Sobre()
-        {
-            return View();
-        }
+        public async Task<IActionResult> Sobre() => View();
 
-        // GET: Tarefa/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tarefa = await _context.Tarefas
-                .Include(t => t.Funcionario)
-                .FirstOrDefaultAsync(m => m.Codigo == id);
-            if (tarefa == null)
-            {
-                return NotFound();
-            }
-
-            return View(tarefa);
+            if (id == null) return NotFound();
+            var tarefa = await _context.Tarefas.Include(t => t.Funcionario).FirstOrDefaultAsync(m => m.Codigo == id);
+            return tarefa == null ? NotFound() : View(tarefa);
         }
 
-        // POST: Tarefa/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var tarefa = await _context.Tarefas.FindAsync(id);
-            if (tarefa != null)
-            {
-                _context.Tarefas.Remove(tarefa);
-            }
-
+            if (tarefa != null) _context.Tarefas.Remove(tarefa);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TarefaExists(int id)
-        {
-            return _context.Tarefas.Any(e => e.Codigo == id);
-        }
+        private bool TarefaExists(int id) => _context.Tarefas.Any(e => e.Codigo == id);
     }
 }
