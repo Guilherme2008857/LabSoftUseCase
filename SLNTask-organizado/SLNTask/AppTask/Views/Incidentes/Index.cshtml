@@ -1,53 +1,54 @@
 ﻿@model IEnumerable<AppTask.Models.Incidente>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Incidentes";
 }
 
-<h1>Index</h1>
+<h1 class="mb-4">Lista de Incidentes</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="/Incidentes/Create" class="btn btn-success text-white">
+        Novo incidente
+    </a>
 </p>
-<table class="table">
-    <thead>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DescricaoProblema)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataIncidente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Solucao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Resolvido)
-            </th>
-            <th></th>
+            <th>Código</th>
+            <th>Descrição do problema</th>
+            <th>Data do incidente</th>
+            <th>Solução</th>
+            <th>Resolvido</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DescricaoProblema)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataIncidente)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Solucao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Resolvido)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Codigo">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Codigo">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Codigo">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Codigo</td>
+                <td>@item.DescricaoProblema</td>
+                <td>@item.DataIncidente</td>
+                <td>@item.Solucao</td>
+                <td>@item.Resolvido</td>
+                <td>
+                    <a href="/Incidentes/Edit/@item.Codigo"
+                       class="btn btn-primary btn-sm text-white">
+                        Alterar
+                    </a>
+
+                    <a href="/Incidentes/Details/@item.Codigo"
+                       class="btn btn-success btn-sm text-white">
+                        Detalhes
+                    </a>
+
+                    <a href="/Incidentes/Delete/@item.Codigo"
+                       class="btn btn-danger btn-sm text-white">
+                        Excluir
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
