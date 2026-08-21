@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Novo Incidente";
+}
+
+<h1 class="mb-4">Cadastrar Novo Incidente</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Incidente/Create" method="post">
+            <div class="mb-3">
+                <label for="Titulo" class="form-label font-weight-bold">Título</label>
+                <input type="text" id="Titulo" name="Titulo" class="form-control" placeholder="Digite o título do incidente" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="Descricao" class="form-label">Descrição</label>
+                <textarea id="Descricao" name="Descricao" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="DataAbertura" class="form-label">Data de Abertura</label>
+                <input type="datetime-local" id="DataAbertura" name="DataAbertura" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="Status" class="form-label">Status</label>
+                <select id="Status" name="Status" class="form-select" required>
+                    <option value="">-- Selecione --</option>
+                    <option value="Aberto">Aberto</option>
+                    <option value="Em Atendimento">Em Atendimento</option>
+                    <option value="Fechado">Fechado</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="FuncionarioId" class="form-label">Funcionário Responsável</label>
+                <select id="FuncionarioId" name="FuncionarioId" class="form-select" required>
+                    <option value="">-- Selecione o Funcionário --</option>
+                    @if (ViewBag.ListaFuncionario != null)
+                    {
+                        foreach (var item in (IEnumerable<SelectListItem>)ViewBag.ListaFuncionario)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Salvar Incidente</button>
+                <a href="/Incidente/Index" class="btn btn-secondary">Voltar para a Lista</a>
+            </div>
+        </form>
+    </div>
+</div>
