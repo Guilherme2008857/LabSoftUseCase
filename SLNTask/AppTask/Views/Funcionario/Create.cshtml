@@ -21,6 +21,13 @@
                 <input type="text" id="Cargo" name="Cargo" class="form-control" placeholder="Digite o cargo" required />
             </div>
 
+            <div class="mb-3">
+                <label for="CodigoGerente" class="form-label font-weight-bold">Gerente</label>
+                <select id="CodigoGerente" name="CodigoGerente" class="form-control" asp-items="ViewBag.CodigoGerente">
+                    <option value="">-- Selecione o Gerente --</option>
+                </select>
+            </div>
+
             <div class="mb-3 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Salvar Funcionário</button>
                 <a href="/Funcionario/Index" class="btn btn-secondary">Voltar para a Lista</a>

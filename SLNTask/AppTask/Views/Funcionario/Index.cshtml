@@ -1,21 +1,18 @@
 ﻿@model IEnumerable<AppTask.Models.Funcionario>
-
 @{
     ViewData["Title"] = "Funcionários";
 }
-
 <h1 class="mb-4">Lista de Funcionários</h1>
-
 <p>
     <a href="/Funcionario/Create" class="btn btn-success text-white">Novo Funcionário</a>
 </p>
-
 <table class="table table-striped table-hover">
     <thead class="table-dark">
         <tr>
             <th>Código</th>
             <th>Nome</th>
             <th>Cargo</th>
+            <th>Gerente</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -26,6 +23,7 @@
                 <td>@item.Codigo</td>
                 <td>@item.Nome</td>
                 <td>@item.Cargo</td>
+                <td>@(item.Gerente != null ? item.Gerente.Nome : "-")</td>
                 <td>
                     <a href="/Funcionario/Edit/@item.Codigo" class="btn btn-primary btn-sm text-white">Alterar</a>
                     <a href="/Funcionario/Details/@item.Codigo" class="btn btn-success btn-sm text-white" style="background-color: #006400;">Detalhe</a>
@@ -37,7 +35,6 @@
         }
     </tbody>
 </table>
-
 <!-- Modal de Confirmação de Exclusão -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -59,7 +56,6 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
     <script>
         var deleteModal = document.getElementById('deleteModal');
@@ -67,10 +63,8 @@
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var descricao = button.getAttribute('data-descricao');
-
             var modalDescricaoSpan = deleteModal.querySelector('#funcionarioNome');
             modalDescricaoSpan.textContent = descricao;
-
             var deleteForm = deleteModal.querySelector('#deleteForm');
             deleteForm.action = '/Funcionario/Delete/' + id;
         });

@@ -14,7 +14,7 @@ public partial class DbTasksContext : DbContext
         : base(options)
     {
     }
-
+    public virtual DbSet<Departamento> Departamentos { get; set; }
     public virtual DbSet<Funcionario> Funcionarios { get; set; }
 
     public virtual DbSet<Tarefa> Tarefas { get; set; }
@@ -26,6 +26,16 @@ public partial class DbTasksContext : DbContext
     {
         modelBuilder.Entity<Funcionario>(entity =>
         {
+
+            modelBuilder.Entity<Departamento>(entity =>
+            {
+                entity.HasKey(e => e.Codigo);
+                entity.ToTable("Departamento");
+                entity.Property(e => e.Nome)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             entity.HasKey(e => e.Codigo).HasName("PK__Funciona__06370DADCC2F491C");
 
             entity.ToTable("Funcionario");
@@ -36,6 +46,14 @@ public partial class DbTasksContext : DbContext
             entity.Property(e => e.Nome)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Gerente)
+            .WithMany(p => p.Subordinados)
+            .HasForeignKey(d => d.CodigoGerente)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasConstraintName("FK_Funcionario_Gerente");
+
+
         });
 
         modelBuilder.Entity<Tarefa>(entity =>
