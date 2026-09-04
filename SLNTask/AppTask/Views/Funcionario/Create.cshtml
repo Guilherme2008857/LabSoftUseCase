@@ -1,0 +1,37 @@
+﻿@model AppTask.Models.Funcionario
+
+@{
+    ViewData["Title"] = "Novo Funcionário";
+}
+
+<h1 class="mb-4">Cadastrar Novo Funcionário</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Funcionario/Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label for="Nome" class="form-label font-weight-bold">Nome do Funcionário</label>
+                <input type="text" id="Nome" name="Nome" class="form-control" placeholder="Digite o nome completo" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="Cargo" class="form-label font-weight-bold">Cargo</label>
+                <input type="text" id="Cargo" name="Cargo" class="form-control" placeholder="Digite o cargo" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="CodigoGerente" class="form-label font-weight-bold">Gerente</label>
+                <select id="CodigoGerente" name="CodigoGerente" class="form-control" asp-items="ViewBag.CodigoGerente">
+                    <option value="">-- Selecione o Gerente --</option>
+                </select>
+            </div>
+
+            <div class="mb-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Salvar Funcionário</button>
+                <a href="/Funcionario/Index" class="btn btn-secondary">Voltar para a Lista</a>
+            </div>
+        </form>
+    </div>
+</div>
