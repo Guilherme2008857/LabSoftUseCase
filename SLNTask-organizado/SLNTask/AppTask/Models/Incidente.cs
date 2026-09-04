@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace AppTask.Models;
 
+
 public partial class Incidente
 {
     public int Codigo { get; set; }
