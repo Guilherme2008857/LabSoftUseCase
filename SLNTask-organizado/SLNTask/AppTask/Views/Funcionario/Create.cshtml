@@ -1,69 +1,51 @@
 @model AppTask.Models.Funcionario
-@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Novo Funcionário";
-    var listaDepartamentos = ViewBag.DepartamentoId as IEnumerable<SelectListItem>;
 }
 
 <h1 class="mb-4">Novo Funcionário</h1>
 
 <div class="row">
     <div class="col-md-6">
-        <form action="/Funcionario/Create" method="post">
+        <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="mb-3">
-                <label for="Nome" class="form-label">Nome</label>
-                <input type="text"
-                       id="Nome"
-                       name="Nome"
-                       value="@Model?.Nome"
-                       class="form-control"
-                       required />
+                <label asp-for="Nome" class="form-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label for="Cargo" class="form-label">Cargo</label>
-                <input type="text"
-                       id="Cargo"
-                       name="Cargo"
-                       value="@Model?.Cargo"
-                       class="form-control"
-                       required />
+                <label asp-for="Cargo" class="form-label"></label>
+                <input asp-for="Cargo" class="form-control" />
+                <span asp-validation-for="Cargo" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label for="DepartamentoId" class="form-label">Departamento</label>
-
-                <select id="DepartamentoId"
-                        name="DepartamentoId"
-                        class="form-select"
-                        required>
+                <label asp-for="DepartamentoId" class="form-label">Departamento</label>
+                <select asp-for="DepartamentoId" class="form-select" asp-items="ViewBag.DepartamentoId">
                     <option value="">Selecione um departamento</option>
-
-                    @if (listaDepartamentos != null)
-                    {
-                        foreach (var departamento in listaDepartamentos)
-                        {
-                            <option value="@departamento.Value"
-                                    selected="@(departamento.Selected ? "selected" : null)">
-                                @departamento.Text
-                            </option>
-                        }
-                    }
                 </select>
+                <span asp-validation-for="DepartamentoId" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                Salvar
-            </button>
+            <div class="mb-3">
+                <label asp-for="CodigoGerente" class="form-label">Gerente</label>
+                <select asp-for="CodigoGerente" class="form-select" asp-items="ViewBag.CodigoGerente">
+                    <option value="">Nenhum gerente</option>
+                </select>
+                <span asp-validation-for="CodigoGerente" class="text-danger"></span>
+            </div>
 
-            <a href="/Funcionario" class="btn btn-secondary">
-                Voltar
-            </a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

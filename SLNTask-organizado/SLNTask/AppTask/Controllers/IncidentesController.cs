@@ -62,8 +62,6 @@ namespace AppTask.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Codigo,DescricaoProblema,DataIncidente,Solucao,Resolvido")] Incidente incidente)
-
-        public async Task<IActionResult> Create([Bind("Codigo,Descricao,DataPlanejada,DataIniciada,DataFinalizada,DataCancelada,StatusTarefa,Prazo,FuncionarioId")] Tarefa tarefa)
         {
             if (ModelState.IsValid)
             {
@@ -72,9 +70,6 @@ namespace AppTask.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(incidente);
-
-            ViewData["ListaFuncionario"] = new SelectList(_context.Funcionarios, "Codigo", "Nome", tarefa.FuncionarioId);
-            return View(tarefa);
         }
 
         // GET: Incidentes/Edit/5

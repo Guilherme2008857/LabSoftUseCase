@@ -11,6 +11,5 @@ public partial class Departamento
 
     public string Sigla { get; set; } = null!;
 
-    public virtual ICollection<Funcionario> Funcionarios { get; set; } = new List<Funcionario>()
-    public string Nome { get; set; } = null!;
+    public virtual ICollection<Funcionario> Funcionarios { get; set; } = new List<Funcionario>();
 }

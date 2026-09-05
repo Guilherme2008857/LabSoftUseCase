@@ -9,6 +9,7 @@
 <div class="row">
     <div class="col-md-5">
         <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Codigo" />
 
@@ -26,8 +27,18 @@
 
             <div class="mb-3">
                 <label asp-for="DepartamentoId" class="form-label">Departamento</label>
-                <select asp-for="DepartamentoId" class="form-select" asp-items="ViewBag.DepartamentoId"></select>
+                <select asp-for="DepartamentoId" class="form-select" asp-items="ViewBag.DepartamentoId">
+                    <option value="">Selecione um departamento</option>
+                </select>
                 <span asp-validation-for="DepartamentoId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CodigoGerente" class="form-label">Gerente</label>
+                <select asp-for="CodigoGerente" class="form-select" asp-items="ViewBag.CodigoGerente">
+                    <option value="">Nenhum gerente</option>
+                </select>
+                <span asp-validation-for="CodigoGerente" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-primary">Salvar</button>

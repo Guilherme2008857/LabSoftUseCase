@@ -19,25 +19,25 @@
     <div class="app-shell">
 
         <aside class="sidebar">
-            <a class="sidebar-brand" asp-controller="Home" asp-action="Index">
+            <a class="sidebar-brand" href="@Url.Action("Index", "Home")">
                 <span class="sidebar-brand-icon"><i class="bi bi-check2-square"></i></span>
                 <span class="sidebar-brand-text">AppTask</span>
             </a>
 
             <nav class="sidebar-nav">
-                <a class="@(currentController == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                <a class="@(currentController == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">
                     <i class="bi bi-house"></i><span>Início</span>
                 </a>
-                <a class="@(currentController == "Tarefa" ? "active" : "")" asp-controller="Tarefa" asp-action="Index">
+                <a class="@(currentController == "Tarefa" ? "active" : "")" href="@Url.Action("Index", "Tarefa")">
                     <i class="bi bi-list-check"></i><span>Tarefas</span>
                 </a>
-                <a class="@(currentController == "Funcionario" ? "active" : "")" asp-controller="Funcionario" asp-action="Index">
+                <a class="@(currentController == "Funcionario" ? "active" : "")" href="@Url.Action("Index", "Funcionario")">
                     <i class="bi bi-people"></i><span>Funcionários</span>
                 </a>
-                <a class="@(currentController == "Departamento" ? "active" : "")" asp-controller="Departamento" asp-action="Index">
+                <a class="@(currentController == "Departamento" ? "active" : "")" href="@Url.Action("Index", "Departamento")">
                     <i class="bi bi-building"></i><span>Departamentos</span>
                 </a>
-                <a class="@(currentController == "Incidentes" ? "active" : "")" asp-controller="Incidentes" asp-action="Index">
+                <a class="@(currentController == "Incidentes" ? "active" : "")" href="@Url.Action("Index", "Incidentes")">
                     <i class="bi bi-exclamation-triangle"></i><span>Incidentes</span>
                 </a>
             </nav>

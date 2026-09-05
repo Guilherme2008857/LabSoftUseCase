@@ -26,8 +26,11 @@ CREATE TABLE dbo.Funcionario (
     Nome VARCHAR(100) NOT NULL,
     Cargo VARCHAR(50) NOT NULL,
     DepartamentoId INT NOT NULL,
+    CodigoGerente INT NULL,
     CONSTRAINT FK_Funcionario_Departamento
-        FOREIGN KEY (DepartamentoId) REFERENCES dbo.Departamento(Codigo)
+        FOREIGN KEY (DepartamentoId) REFERENCES dbo.Departamento(Codigo),
+    CONSTRAINT FK_Funcionario_Gerente
+        FOREIGN KEY (CodigoGerente) REFERENCES dbo.Funcionario(Codigo)
 );
 GO
 
@@ -60,10 +63,10 @@ INSERT INTO dbo.Departamento (Nome, Sigla) VALUES
 ('Recursos Humanos', 'RH'),
 ('Financeiro', 'FIN');
 
-INSERT INTO dbo.Funcionario (Nome, Cargo, DepartamentoId) VALUES
-('Carlos Silva', 'Desenvolvedor Senior', 1),
-('Ana Oliveira', 'Analista de QA', 1),
-('Roberto Santos', 'Gerente de RH', 2);
+INSERT INTO dbo.Funcionario (Nome, Cargo, DepartamentoId, CodigoGerente) VALUES
+('Carlos Silva', 'Desenvolvedor Senior', 1, NULL),
+('Ana Oliveira', 'Analista de QA', 1, NULL),
+('Roberto Santos', 'Gerente de RH', 2, NULL);
 
 INSERT INTO dbo.Tarefa
 (Descricao, DataPlanejada, DataIniciada, DataFinalizada, DataCancelada, StatusTarefa, Prazo, FuncionarioId)

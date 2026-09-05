@@ -60,6 +60,12 @@ public partial class DbTasksContext : DbContext
                 .HasForeignKey(e => e.DepartamentoId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_Funcionario_Departamento");
+
+            entity.HasOne(e => e.Gerente)
+                .WithMany(e => e.Subordinados)
+                .HasForeignKey(e => e.CodigoGerente)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_Funcionario_Gerente");
         });
 
         modelBuilder.Entity<Tarefa>(entity =>
